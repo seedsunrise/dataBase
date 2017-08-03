@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.flaginfo.dao.DictMapper">
+	<resultMap id="BaseResultMap" type="cn.com.flaginfo.model.Dict">
+		<id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+       
+    </resultMap>
+    <resultMap id="DictResultMap" type="cn.com.flaginfo.model.Dict">
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
+    </resultMap>
+	<!-- 字典查询 -->
+	<select id="getSubDictByType" resultMap="BaseResultMap">
+		select id,parent_id,code,value from sys_dict where type=#{type} and parent_id = #{parentId} and del_flag='0' ORDER BY type,sort DESC 
+	</select>
+	<!-- 查询所有字典 -->
+	<select id="getAllDict" resultMap="BaseResultMap">
+		select id,parent_id,type,code,value from sys_dict where del_flag='0' ORDER BY type,sort DESC 
+	</select>
+	
+	<!-- 字典查询 -->
+	<select id="getDictType" resultMap="BaseResultMap">
+		select id,parent_id,code,value from sys_dict where type=#{type} and del_flag='0'
+	</select>
+	<!-- 字典查询 -->
+	<select id="getDictByType" resultMap="DictResultMap">
+		select id,parent_id,code,value from sys_dict where concat(code,type)=#{typeAndCode} and del_flag='0'
+	</select>
+	
+	<!-- 字典查询 -->
+	<select id="getDictByType1" resultType="string">
+		select value from sys_dict where concat(code,type)=#{typeAndCode} and del_flag='0'
+	</select>
+</mapper>
